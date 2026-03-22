@@ -1,8 +1,7 @@
+const GROQ_API_KEY = "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";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama3-8b-8192";
+const MODEL = "llama-3.3-70b-versatile";
 
-const setupScreen = document.getElementById("setupScreen");
-const chatContainer = document.getElementById("chatContainer");
 const chatMessages = document.getElementById("chatMessages");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
@@ -13,39 +12,6 @@ const conversationHistory = [
     content: "You are a helpful and friendly AI assistant. Answer questions clearly and concisely."
   }
 ];
-
-// On load: check if API key is already saved
-window.addEventListener("load", () => {
-  const savedKey = localStorage.getItem("groq_api_key");
-  if (savedKey) {
-    showChat();
-  } else {
-    setupScreen.style.display = "flex";
-  }
-});
-
-function saveApiKey() {
-  const key = document.getElementById("apiKeyInput").value.trim();
-  if (!key) {
-    alert("Please enter your API key.");
-    return;
-  }
-  localStorage.setItem("groq_api_key", key);
-  showChat();
-}
-
-function showChat() {
-  setupScreen.style.display = "none";
-  chatContainer.style.display = "flex";
-  userInput.focus();
-}
-
-function resetApiKey() {
-  localStorage.removeItem("groq_api_key");
-  chatContainer.style.display = "none";
-  setupScreen.style.display = "flex";
-  document.getElementById("apiKeyInput").value = "";
-}
 
 function appendMessage(role, text, isLoading = false) {
   const messageDiv = document.createElement("div");
@@ -67,12 +33,6 @@ async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
-  const apiKey = localStorage.getItem("groq_api_key");
-  if (!apiKey) {
-    resetApiKey();
-    return;
-  }
-
   userInput.value = "";
   sendBtn.disabled = true;
   userInput.disabled = true;
@@ -87,7 +47,7 @@ async function sendMessage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
+        "Authorization": `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
         model: MODEL,
@@ -97,9 +57,7 @@ async function sendMessage() {
       })
     });
 
-    if (!response.ok) {
-      throw new Error("API request failed");
-    }
+    if (!response.ok) throw new Error("API error");
 
     const data = await response.json();
     const botReply = data.choices[0].message.content;
@@ -110,7 +68,7 @@ async function sendMessage() {
     loadingBubble.textContent = botReply;
   } catch (error) {
     loadingBubble.classList.remove("loading");
-    loadingBubble.textContent = "Sorry, something went wrong. Please check your API key or try again.";
+    loadingBubble.textContent = "Sorry, something went wrong. Please try again.";
   }
 
   sendBtn.disabled = false;
