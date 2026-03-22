@@ -20,7 +20,7 @@ A simple, free AI chatbot built with HTML, CSS, and JavaScript — powered by th
 
 ## Live Demo
 
-[sparli-croncore.github.io/my-chatbot](https://sparli-croncore.github.io/my-chatbot/)
+[your-username.github.io/my-chatbot](https://your-username.github.io/my-chatbot/)
 
 ## Project Structure
 
@@ -36,7 +36,7 @@ my-chatbot/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/sparli-croncore/my-chatbot.git
+   git clone https://github.com/your-username/my-chatbot.git
    ```
 2. Open `index.html` in your browser — no build step needed.
 
